@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import { Input } from '../ui/input';
+import Input from '../ui/input';
 
 const SearchBar = () => {
   const [value, setValue] = React.useState<string>('');
