@@ -1,0 +1,60 @@
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { cn } from '@/lib/utils';
+
+const inputVariants = cva(
+  'flex gap-1 items-center px-2 text-t11-body-2 bg-light-neutral-9 border rounded-3 border-dark-neutral-2 placeholder:text-muted-foreground focus-visible:outline-none  disabled:cursor-not-allowed disabled:opacity-50 hover:border-2 focus-visible:border-2 ',
+  {
+    variants: {
+      variant: {
+        sm: 'h-4',
+        md: 'h-5',
+        lg: 'h-6',
+      },
+    },
+    defaultVariants: {
+      variant: 'sm',
+    },
+  }
+);
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement>,
+    VariantProps<typeof inputVariants> {
+  isSearchBar?: boolean;
+}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, variant, type, isSearchBar, ...props }, ref) => {
+    const [inputValue, setInputValue] = React.useState<string>('');
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setInputValue(event.target.value);
+    };
+
+    const handleClearClick = () => {
+      setInputValue('');
+    };
+    return (
+      <label className={cn(inputVariants({ variant, className }))}>
+        {isSearchBar && <p>Q</p>}
+        <input
+          type={type}
+          className='bg-light-neutral-9 focus-visible:outline-none'
+          onChange={handleInputChange}
+          value={inputValue}
+          ref={ref}
+          {...props}
+        />
+        {isSearchBar && inputValue && (
+          <p className='bg-light-neutral-9' onClick={handleClearClick}>
+            X
+          </p>
+        )}
+      </label>
+    );
+  }
+);
+Input.displayName = 'Input';
+
+export { Input };
